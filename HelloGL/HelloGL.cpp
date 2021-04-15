@@ -31,7 +31,7 @@ void HelloGL::InitObjects()
 	camera->up.z = 0.0f;
 	Mesh* monkeyMesh = MeshLoader::LoadOBJ((char*)"monkey.obj");
 	Texture2D* texture = new Texture2D();
-	texture->LoadBMP((char*)"3150.bmp");
+	texture->Load((char*)"Penguins.raw", 512, 512);
 	for (int i = 0; i < 500; i++) {
 		objects[i] = new Cube(monkeyMesh, texture, ((rand() % 400) / 7.5f) - 20.0f, ((rand() % 200) / 7.5f) - 15.0f, -(rand() % 1000), (rand() % 100) / 10.0f, (rand() % 2) - 1, (rand() % 2) - 1, (rand() % 2) - 1);
 	}
@@ -83,8 +83,8 @@ void HelloGL::InitGL(int argc, char* argv[])
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
 	
 }
 

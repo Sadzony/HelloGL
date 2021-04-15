@@ -26,7 +26,7 @@ Cube::~Cube()
 
 void Cube::Draw()
 {
-	if (_mesh->Vertices != nullptr && _mesh->Normals != nullptr) {
+	if (_mesh->Vertices != nullptr && _mesh->Normals != nullptr && _mesh->TexCoords != nullptr) {
 		glBindTexture(GL_TEXTURE_2D, _texture->GetID());
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);

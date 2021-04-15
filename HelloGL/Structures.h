@@ -34,11 +34,16 @@ struct Vertex {
 struct TexCoord {
 	GLfloat u, v;
 };
+struct Face {
+	int v1, v2, v3;
+	int t1, t2, t3;
+	int n1, n2, n3;
+};
 struct Mesh {
 	TexCoord* TexCoords;
 	Vertex* Vertices;
 	Vector3* Normals;
-	int VertexCount, NormalCount, TexCoordCount;
+	int VertexCount, NormalCount, TexCoordCount, FaceCount;
 };
 
 struct Lighting {
