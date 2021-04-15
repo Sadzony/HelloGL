@@ -29,6 +29,12 @@ void HelloGL::InitObjects()
 	camera->up.x = 0.0f;
 	camera->up.y = 1.0f;
 	camera->up.z = 0.0f;
+	Mesh* monkeyMesh = MeshLoader::LoadOBJ((char*)"monkey.obj");
+	Texture2D* texture = new Texture2D();
+	texture->LoadBMP((char*)"3150.bmp");
+	for (int i = 0; i < 500; i++) {
+		objects[i] = new Cube(monkeyMesh, texture, ((rand() % 400) / 7.5f) - 20.0f, ((rand() % 200) / 7.5f) - 15.0f, -(rand() % 1000), (rand() % 100) / 10.0f, (rand() % 2) - 1, (rand() % 2) - 1, (rand() % 2) - 1);
+	}
 	
 	
 }
@@ -86,7 +92,9 @@ void HelloGL::Display()
 {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the scene
-	//render objects
+	for (int i = 0; i < 500; i++) {
+		objects[i]->Draw();
+	}
 	glFlush(); //flush the scene drawn to the graphics card
 	glutSwapBuffers();
 }
@@ -101,7 +109,9 @@ void HelloGL::Update()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, &(lightData->specular.x));
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, &(lightData->diffuse.x));
 	glLightfv(GL_LIGHT0, GL_POSITION, &(lightPosition->x));
-	//update objects
+	for (int i = 0; i < 500; i++) {
+		objects[i]->Update();
+	}
 	
 	glutPostRedisplay();
 }

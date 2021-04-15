@@ -26,7 +26,7 @@ Cube::~Cube()
 
 void Cube::Draw()
 {
-	if (_mesh->Vertices != nullptr && _mesh->Normals != nullptr && _mesh->Faces != nullptr) {
+	if (_mesh->Vertices != nullptr && _mesh->Normals != nullptr) {
 		glBindTexture(GL_TEXTURE_2D, _texture->GetID());
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -43,7 +43,7 @@ void Cube::Draw()
 		glPushMatrix();
 		glTranslatef(position.x, position.y, position.z);
 		glRotatef(rotation, rotationDirection.x, rotationDirection.y, rotationDirection.z);
-		glDrawElements(GL_TRIANGLES, _mesh->IndexCount, GL_UNSIGNED_SHORT, _mesh->Indices);
+		glDrawArrays(GL_TRIANGLES, 0, _mesh->VertexCount);
 		glPopMatrix();
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
