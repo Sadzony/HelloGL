@@ -13,6 +13,9 @@ struct Vector3 {
 	float y;
 	float z;
 };
+struct Vector4 {
+	float x, y, z, w;
+};
 
 
 struct Camera {
@@ -31,10 +34,26 @@ struct Vertex {
 struct TexCoord {
 	GLfloat u, v;
 };
+struct Face {
+	GLushort vIndex1, vIndex2, vIndex3;
+	GLushort tIndex1, tIndex2, tIndex3;
+	GLushort nIndex1, nIndex2, nIndex3;
+};
 struct Mesh {
 	TexCoord* TexCoords;
 	Vertex* Vertices;
-	Color* Colors;
-	GLushort* Indices;
-	int VertexCount, ColorCount, IndexCount, TexCoordCount;
+	Vector3* Normals;
+	Face* Faces;
+	int VertexCount, NormalCount, FaceCount, TexCoordCount;
+};
+
+struct Lighting {
+	Vector4 ambient, diffuse, specular;
+};
+struct Material {
+	Vector4 ambient, diffuse, specular;
+	GLfloat shininess;
+};
+struct ListNode {
+	ListNode* next;
 };

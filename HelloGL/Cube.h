@@ -8,6 +8,7 @@ private:
 	GLfloat rotation;
 	Vector3 position;
 	Vector3 rotationDirection;
+	Material* mat;
 	float rotationSpeed;
 	
 public:

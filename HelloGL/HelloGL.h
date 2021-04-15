@@ -10,6 +10,7 @@ public:
 	HelloGL(int argc, char* argv[]);
 	~HelloGL(void);
 	void InitObjects();
+	void InitLight();
 	void InitGL(int argc, char* argv[]);
 	void Display();
 	void Update();
@@ -17,5 +18,7 @@ public:
 private:
 	Camera* camera;
 	SceneObject* objects [1000];
+	Vector4* lightPosition;
+	Lighting* lightData;
 };
 
