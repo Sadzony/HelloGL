@@ -21,20 +21,29 @@ void HelloGL::InitObjects()
 {
 	camera = new Camera();
 	camera->eye.x = 0.0f;
-	camera->eye.y = 0.0f;
-	camera->eye.z = 1.0f;
+	camera->eye.y = 9.0f;
+	camera->eye.z = -20.0f;
 	camera->center.x = 0.0f;
-	camera->center.y = 0.0f;
+	camera->center.y = 8.0f;
 	camera->center.z = 0.0f;
 	camera->up.x = 0.0f;
 	camera->up.y = 1.0f;
 	camera->up.z = 0.0f;
-	Mesh* monkeyMesh = MeshLoader::LoadOBJ((char*)"monkey.obj");
-	Texture2D* texture = new Texture2D();
-	texture->Load((char*)"Penguins.raw", 512, 512);
-	for (int i = 0; i < 500; i++) {
-		objects[i] = new Cube(monkeyMesh, texture, ((rand() % 400) / 7.5f) - 20.0f, ((rand() % 200) / 7.5f) - 15.0f, -(rand() % 1000), (rand() % 100) / 10.0f, (rand() % 2) - 1, (rand() % 2) - 1, (rand() % 2) - 1);
-	}
+	Mesh* roadMesh = MeshLoader::LoadOBJ((char*)"Road.obj");
+	Mesh* lampMesh = MeshLoader::LoadOBJ((char*)"Lamp.obj");
+	Mesh* carMesh = MeshLoader::LoadOBJ((char*)"Car.obj");
+	Texture2D* roadTexture = new Texture2D();
+	roadTexture->LoadBMP((char*)"road texture.bmp");
+	Texture2D* lampTexture = new Texture2D();
+	lampTexture->LoadBMP((char*)"lamp texture.bmp");
+	Texture2D* carTexture = new Texture2D();
+	carTexture->LoadBMP((char*)"car texture.bmp");
+	roadObject = new StaticObject(roadMesh, roadTexture, 0, 0, 0, 0, 0, 0, 0);
+	roadObject2 = new StaticObject(roadMesh, roadTexture, 20, 0, 0, 0, 0, 0, 0);
+	roadObject3 = new StaticObject(roadMesh, roadTexture, -20, 0, 0, 0, 0, 0, 0);
+	lampObject = new StaticObject(lampMesh, lampTexture, 7, 5.15, 5.3, 0, 1, 0, 180);
+	lampObject2 = new StaticObject(lampMesh, lampTexture, -7, 5.15, 5.3, 0, 1, 0, 180);
+	carObject = new Car(carMesh, carTexture, 0, 4.5, 0, 0, 1, 0, 180, 0.1);
 	
 	
 }
@@ -43,25 +52,26 @@ void HelloGL::InitLight()
 {
 	lightPosition = new Vector4();
 	lightPosition->x = 0.0f;
-	lightPosition->y = 0.0f;
-	lightPosition->z = 1.0f;
+	lightPosition->y = 9.0f;
+	lightPosition->z = 0.0f;
 	lightPosition->w = 0.0f;
 
 	lightData = new Lighting();
-	lightData->ambient.x = 0.2f;
-	lightData->ambient.y = 0.2f;
-	lightData->ambient.z = 0.2f;
+	lightData->ambient.x = 0.1f;
+	lightData->ambient.y = 0.1f;
+	lightData->ambient.z = 0.1f;
 	lightData->ambient.w = 1.0f;
 
-	lightData->diffuse.x = 0.8f;
-	lightData->diffuse.y = 0.8f;
-	lightData->diffuse.z = 0.8f;
+	lightData->diffuse.x = 1.0f;
+	lightData->diffuse.y = 0.9f;
+	lightData->diffuse.z = 0.2f;
 	lightData->diffuse.w = 1.0f;
 
-	lightData->specular.x = 0.2f;
-	lightData->specular.y = 0.2f;
-	lightData->specular.z = 0.2f;
+	lightData->specular.x = 1.0f;
+	lightData->specular.y = 1.0f;
+	lightData->specular.z = 1.0f;
 	lightData->specular.w = 1.0f;
+
 }
 
 void HelloGL::InitGL(int argc, char* argv[])
@@ -83,8 +93,8 @@ void HelloGL::InitGL(int argc, char* argv[])
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
 	
 }
 
@@ -92,9 +102,18 @@ void HelloGL::Display()
 {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the scene
-	for (int i = 0; i < 500; i++) {
-		objects[i]->Draw();
-	}
+	roadObject->Draw();
+	roadObject2->Draw();
+	roadObject3->Draw();
+	lampObject->Draw();
+	lampObject2->Draw();
+	carObject->Draw();
+	glPushMatrix();
+	glTranslatef(0, 5, 0);
+	glRotatef(90, 1, 0, 0);
+	glRotatef(sphereRotation, 0, 0, 1);
+	glutWireSphere(50, 20, 20);
+	glPopMatrix();
 	glFlush(); //flush the scene drawn to the graphics card
 	glutSwapBuffers();
 }
@@ -109,14 +128,30 @@ void HelloGL::Update()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, &(lightData->specular.x));
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, &(lightData->diffuse.x));
 	glLightfv(GL_LIGHT0, GL_POSITION, &(lightPosition->x));
-	for (int i = 0; i < 500; i++) {
-		objects[i]->Update();
+	roadObject->Update();
+	lampObject->Update();
+	lampObject2->Update();
+	carObject->Update();
+	camera->eye.x = carObject->GetPosition().x;
+	camera->center.x = carObject->GetPosition().x;
+	if (sphereRotation <= 360) {
+		sphereRotation += 0.3f;
 	}
-	
+	else {
+		sphereRotation = 0;
+	}
 	glutPostRedisplay();
 }
 
 void HelloGL::Keyboard(unsigned char key, int x, int y)
 {
-
+	if (key == 'd') {
+		carObject->moveDirection = -1;
+	}
+	else if (key == 'a') {
+		carObject->moveDirection = 1;
+	}
+	else if (key != 'd' && key != 'a') {
+		carObject->moveDirection = 0;
+	}
 }

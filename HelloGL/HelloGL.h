@@ -1,6 +1,7 @@
 #pragma once
 #include "MeshLoader.h"
-#include "Cube.h"
+#include "StaticObject.h"
+#include "Car.h"
 #define REFRESH_RATE 16
 
 class HelloGL
@@ -16,8 +17,15 @@ public:
 	void Keyboard(unsigned char  key, int x, int y);
 private:
 	Camera* camera;
-	SceneObject* objects [500];
+	StaticObject* roadObject;
+	StaticObject* roadObject2;
+	StaticObject* roadObject3;
+	StaticObject* lampObject;
+	StaticObject* lampObject2;
+	Car* carObject;
 	Vector4* lightPosition;
 	Lighting* lightData;
+	float sphereRotation = 0;
+
 };
 
